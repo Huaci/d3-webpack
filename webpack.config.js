@@ -13,6 +13,9 @@ module.exports = {
             exclude: /node_modules/,
             loader: 'babel-loader',
             query: {
+                plugins: [
+                    ['import', {libraryName: 'antd', style: 'css'}],
+                ],
                 presets: [
                     'es2015',
                     'stage-0',
@@ -29,6 +32,6 @@ module.exports = {
         extensions: ['.js', '.jsx', '.json', '.coffee']
     },
     plugins: [new HtmlWebpackPlugin({
-        filename: 'src/index.html'
+        filename: 'index.html'
     })]
 }
