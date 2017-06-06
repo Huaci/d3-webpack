@@ -1,5 +1,7 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     entry: './src/index.js',
     devtool: 'source-map',　　// 调试时定位到编译前的代码位置，推荐安装react插件
@@ -7,9 +9,14 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+    resolve: {
+        modules: [path.resolve(__dirname, 'node_modules')],//优化webpack文件搜索范围
+        // 现在你import文件的时候可以直接使用import Func from './file'，不用再使用import Func from './file.js'
+        extensions: ['.js', '.jsx', '.json']
+    },
     module: {
         rules: [{
-            test: /\.jsx?$/, // test 去判断是否为.js或.jsx,是的话就是进行es6和jsx的编译
+            test: /\.(js|jsx)$/, // test 去判断是否为.js或.jsx,是的话就是进行es6和jsx的编译
             exclude: /node_modules/,
             loader: 'babel-loader',
             query: {
@@ -25,13 +32,37 @@ module.exports = {
                     'react'
                 ]
             }
-        }]
+        },{
+                test: /\.css$/,
+            loader: ExtractTextPlugin.extract({
+                fallback: 'style-loader',  //  fallbackLoader: 'style-loader',
+                use:[
+                    "css-loader",
+                    "postcss-loader",
+                    "sass-loader"
+                    ]
+
+            })
+            },{
+            test: /\.scss$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                { loader: 'sass-loader', options: { sourceMap: true } }
+            ]
+        },
+        ]
     },
-    resolve: {
-        // 现在你import文件的时候可以直接使用import Func from './file'，不用再使用import Func from './file.js'
-        extensions: ['.js', '.jsx', '.json', '.coffee']
-    },
-    plugins: [new HtmlWebpackPlugin({
-        filename: 'index.html'
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new ExtractTextPlugin({
+            filename: "css/[name].css?[hash]-[chunkhash]-[contenthash]-[name]",
+            disable: false,
+            allChunks: true
+        }),
+        new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: 'src/index.html'
     })]
 }
