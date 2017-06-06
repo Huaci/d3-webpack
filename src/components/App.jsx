@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { DatePicker, Select, Button, Input, Form, Row, Col, Spin } from 'antd';
+import  './../styles/app.scss'
 class App extends Component {
     constructor(props) {
         super(props);
@@ -11,7 +12,7 @@ class App extends Component {
         return(
             <div>
                 <Button/>
-                1234565677
+                <p className="pan">1233</p>
             </div>
         )
     }

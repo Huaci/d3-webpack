@@ -39,8 +39,7 @@ module.exports = {
                 use:[
                     "css-loader",
                     "postcss-loader",
-                    "sass-loader"
-                    ]
+                    "sass-loader"]
 
             })
             },{
